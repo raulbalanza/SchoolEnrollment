@@ -3,7 +3,9 @@ package me.raulbalanza.tjv.school_enrollment.business;
 import me.raulbalanza.tjv.school_enrollment.dao.CrudRepository;
 import me.raulbalanza.tjv.school_enrollment.domain.ClassInterval;
 import me.raulbalanza.tjv.school_enrollment.domain.Course;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CourseService extends CrudService<String, Course> {
 
     protected CourseService(CrudRepository<String, Course> repository) {
@@ -12,7 +14,7 @@ public class CourseService extends CrudService<String, Course> {
 
     public boolean addSchedule(String id, ClassInterval newCi) throws UnknownEntityException {
 
-        if (newCi == null) return false;
+        if (id == null || newCi == null) return false;
 
         Course c = readById(id);
 

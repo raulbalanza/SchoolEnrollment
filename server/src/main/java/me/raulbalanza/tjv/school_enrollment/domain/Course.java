@@ -1,5 +1,6 @@
 package me.raulbalanza.tjv.school_enrollment.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,14 +9,14 @@ public class Course {
 
     private final String ID;
     private String name;
-    private double credits;
+    private int credits;
     private int year;
     private int capacity;
-    private LocalDateTime enrollLimit;
+    private LocalDate enrollLimit;
     private List<ClassInterval> schedule;
     // teacher list
 
-    public Course(String ID, String name, double credits, int year, int capacity, LocalDateTime enrollLimit) {
+    public Course(String ID, String name, int credits, int year, int capacity, LocalDate enrollLimit) {
         this.ID = ID;
         this.name = name;
         this.credits = credits;
@@ -37,11 +38,11 @@ public class Course {
         this.name = name;
     }
 
-    public double getCredits() {
+    public int getCredits() {
         return credits;
     }
 
-    public void setCredits(double credits) {
+    public void setCredits(int credits) {
         this.credits = credits;
     }
 
@@ -61,11 +62,11 @@ public class Course {
         this.capacity = capacity;
     }
 
-    public LocalDateTime getEnrollLimit() {
+    public LocalDate getEnrollLimit() {
         return enrollLimit;
     }
 
-    public void setEnrollLimit(LocalDateTime enrollLimit) {
+    public void setEnrollLimit(LocalDate enrollLimit) {
         this.enrollLimit = enrollLimit;
     }
 

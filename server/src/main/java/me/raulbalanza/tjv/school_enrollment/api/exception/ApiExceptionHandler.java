@@ -24,7 +24,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityStateException.class)
     public ResponseEntity<Object> handleNoDataFoundException(EntityStateException ex, WebRequest request) {
 
-        return new ResponseEntity<>("The entity already exists", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("The entity already exists", HttpStatus.CONFLICT);
     }
 
 }

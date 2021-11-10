@@ -2,6 +2,7 @@ package me.raulbalanza.tjv.school_enrollment.domain;
 
 import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,10 +14,10 @@ public abstract class User {
     protected String email;
     protected String name;
     protected String surnames;
-    protected LocalDateTime birthDate;
+    protected LocalDate birthDate;
     protected LocalDateTime registeredAt;
 
-    public User(String username, String password, String email, String name, String surnames, String ID, LocalDateTime birthDate) {
+    public User(String username, String password, String email, String name, String surnames, String ID, LocalDate birthDate) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -71,11 +72,11 @@ public abstract class User {
         this.surnames = surnames;
     }
 
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

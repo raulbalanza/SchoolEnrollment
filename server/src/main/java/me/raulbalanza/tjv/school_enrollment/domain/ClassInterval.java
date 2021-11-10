@@ -16,6 +16,18 @@ public class ClassInterval {
         this.end = LocalTime.of(hEnd, mEnd);
     }
 
+    public DayOfWeek getDay() {
+        return day;
+    }
+
+    public LocalTime getStart() {
+        return start;
+    }
+
+    public LocalTime getEnd() {
+        return end;
+    }
+
     public boolean overlaps(ClassInterval ci){
 
         if (this.day.equals(ci.day)){

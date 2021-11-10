@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StudentDto {
+public class TeacherDto {
 
     // These attributes are public because the DTO is just a transfer object. Wrong data will never get into the actual classes.
     @JsonView(Views.Basic.class)
@@ -27,7 +27,7 @@ public class StudentDto {
     public String surnames;
 
     @JsonView(Views.Detailed.class)
-    public int currentYear;
+    public String rank;
 
     @JsonView(Views.Internal.class)
     public String password;
@@ -36,16 +36,16 @@ public class StudentDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.M.yyyy")
     public LocalDate birthDate;
 
-    public StudentDto() { }
+    public TeacherDto() { }
 
-    public StudentDto(String u, String ID, String p, String e, String n, String sn, LocalDate bD, int cY) {
+    public TeacherDto(String u, String ID, String p, String e, String n, String sn, LocalDate bD, String r) {
         username = u;
         this.ID = ID;
         password = p;
         email = e;
         name = n;
         surnames = sn;
-        currentYear = cY;
+        rank = r;
         birthDate = bD;
     }
 
