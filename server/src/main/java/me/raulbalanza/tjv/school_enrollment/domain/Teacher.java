@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Teacher extends User {
 
-    // missing list of subjects that the teacher is teaching
+    private Collection<Course> teachingCourses;
     protected String rank;
 
     public Teacher(String username, String ID, String password, String email, String name, String surnames, LocalDate birthDate, String rank) {

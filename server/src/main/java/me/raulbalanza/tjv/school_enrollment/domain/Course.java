@@ -3,6 +3,7 @@ package me.raulbalanza.tjv.school_enrollment.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Course {
@@ -14,7 +15,8 @@ public class Course {
     private int capacity;
     private LocalDate enrollLimit;
     private List<ClassInterval> schedule;
-    // teacher list
+    private Collection<Teacher> teachers;
+    private Collection<Student> students;
 
     public Course(String ID, String name, int credits, int year, int capacity, LocalDate enrollLimit) {
         this.ID = ID;

@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Student extends User {
 
-    // missing subjects where the student is enrolled
+    private Collection<Course> enrolledCourses;
     protected int currentYear;
 
     public Student(String username, String ID, String password, String email, String name, String surnames, LocalDate birthDate, int currentYear) {
