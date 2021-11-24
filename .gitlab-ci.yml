@@ -1,0 +1,8 @@
+# CI to build and test the backend
+build-and-test-server:
+    image: gradle:7-jdk17-alpine
+    script:
+        - gradle build
+    artifacts:
+        - paths:
+            - build/libs/*.jar
