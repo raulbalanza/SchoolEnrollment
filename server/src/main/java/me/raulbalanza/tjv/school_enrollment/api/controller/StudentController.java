@@ -22,7 +22,7 @@ class StudentController {
         this.studentService = studentService;
     }
 
-    @JsonView(Views.Basic.class)
+    /*@JsonView(Views.Basic.class)
     @GetMapping("/students")
     Collection<StudentDto> getAll() {
         return StudentConverter.fromCollection(this.studentService.readAll());
@@ -75,6 +75,6 @@ class StudentController {
     Collection<CourseDto> removeFromCourse(@PathVariable String username, @PathVariable String course_id) throws EntityStateException {
         // This will remove the student from a subject and then return the list of the enrolled courses
         return Collections.EMPTY_LIST;
-    }
+    }*/
 
 }

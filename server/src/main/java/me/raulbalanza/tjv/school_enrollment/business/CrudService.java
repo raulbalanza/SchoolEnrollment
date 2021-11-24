@@ -1,52 +1,52 @@
 package me.raulbalanza.tjv.school_enrollment.business;
 
-import me.raulbalanza.tjv.school_enrollment.dao.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Common superclass for business logic of all entities supporting operations Create, Read, Update, Delete.
+ * Common class for business logic of all entities supporting CRUD operations.
  *
  * @param <K> Type of (primary) key.
  * @param <E> Type of entity
  */
-public abstract class CrudService<K, E> {
+public abstract class CrudService<K, E, R extends JpaRepository<E, K>> {
+    protected final R repository;
 
-    protected final CrudRepository<K, E> repository; // Data layer
-
-    protected CrudService(CrudRepository<K, E> repository) {
+    protected CrudService(R repository) {
         this.repository = repository;
     }
 
+    protected abstract boolean exists(E entity);
+
+    // Store a new entity
+    @Transactional
     public void create(E entity) throws EntityStateException {
-        if (repository.exists(entity))
+        if (this.exists(entity))
             throw new EntityStateException(entity);
-        repository.createOrUpdate(entity);
+        repository.save(entity);
     }
 
-    public E readById(K id) throws UnknownEntityException {
-        Optional<E> entity = repository.readById(id);
-        if (entity.isPresent()){
-            return entity.get();
-        } else {
-            throw new UnknownEntityException(id);
-        }
+    public Optional<E> readById(K id) {
+        return repository.findById(id);
     }
 
     public Collection<E> readAll() {
-        return repository.readAll();
+        return repository.findAll();
     }
 
-    public void update(E entity) throws UnknownEntityException {
-        if (repository.exists(entity))
-            repository.createOrUpdate(entity);
+    // Replace a stored entity
+    @Transactional
+    public void update(E entity) throws EntityStateException {
+        if (this.exists(entity))
+            repository.save(entity);
         else
-            throw new UnknownEntityException(entity);
+            throw new EntityStateException(entity);
     }
 
-    public void deleteById(K id) throws UnknownEntityException {
-        this.readById(id);
+    public void deleteById(K id) {
         repository.deleteById(id);
     }
 }
-

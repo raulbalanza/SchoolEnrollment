@@ -42,4 +42,53 @@ public class CourseDto {
         this.capacity = capacity;
         this.enrollLimit = enrollLimit;
     }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public LocalDate getEnrollLimit() {
+        return enrollLimit;
+    }
+
+    public void setEnrollLimit(LocalDate enrollLimit) {
+        this.enrollLimit = enrollLimit;
+    }
+
 }

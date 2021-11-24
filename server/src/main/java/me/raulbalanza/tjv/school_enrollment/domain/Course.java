@@ -1,31 +1,70 @@
 package me.raulbalanza.tjv.school_enrollment.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
+@Entity
 public class Course {
 
-    private final String ID;
+    @Id
+    private String ID;
+
     private String name;
     private int credits;
     private int year;
     private int capacity;
     private LocalDate enrollLimit;
-    private List<ClassInterval> schedule;
-    private Collection<Teacher> teachers;
-    private Collection<Student> students;
+
+    @OneToMany(mappedBy = "course")
+    private Collection<ClassInterval> schedule = new ArrayList<ClassInterval>();
+
+    @ManyToMany
+    private Collection<Teacher> teachers = new ArrayList<Teacher>();
+
+    @ManyToMany
+    private Collection<Student> students = new ArrayList<Student>();
 
     public Course(String ID, String name, int credits, int year, int capacity, LocalDate enrollLimit) {
-        this.ID = ID;
+        this.ID = Objects.requireNonNull(ID);
         this.name = name;
         this.credits = credits;
         this.year = year;
         this.capacity = capacity;
         this.enrollLimit = enrollLimit;
-        this.schedule = new ArrayList<ClassInterval>();
+    }
+
+    public Course(){ }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public void setSchedule(List<ClassInterval> schedule) {
+        this.schedule = schedule;
+    }
+
+    public void setTeachers(Collection<Teacher> teachers) {
+        this.teachers = teachers;
+    }
+
+    public Collection<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setStudents(Collection<Student> students) {
+        this.students = students;
+    }
+
+    public Collection<Student> getStudents() {
+        return students;
     }
 
     public String getID() {
@@ -88,4 +127,5 @@ public class Course {
         }
         return res;
     }
+
 }

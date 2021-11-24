@@ -25,7 +25,7 @@ class TeacherController {
         this.teacherService = teacherService;
     }
 
-    @JsonView(Views.Basic.class)
+    /*@JsonView(Views.Basic.class)
     @GetMapping("/teachers")
     Collection<TeacherDto> getAll() {
         return TeacherConverter.fromCollection(this.teacherService.readAll());
@@ -60,6 +60,6 @@ class TeacherController {
     void deleteUser(@PathVariable String username) throws UnknownEntityException {
         this.teacherService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-    }
+    }*/
 
 }

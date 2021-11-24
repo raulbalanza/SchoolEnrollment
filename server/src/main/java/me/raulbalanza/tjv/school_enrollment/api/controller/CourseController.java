@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 class CourseController {
@@ -42,17 +43,17 @@ class CourseController {
     @JsonView(Views.Detailed.class)
     @GetMapping("/courses/{id}")
     CourseDto getOne(@PathVariable String id) throws UnknownEntityException {
-        Course c = this.courseService.readById(id);
-        return CourseConverter.fromModel(c);
+        Optional<Course> c = this.courseService.readById(id);
+        if (c.isEmpty()) throw new UnknownEntityException(id);
+        return CourseConverter.fromModel(c.get());
     }
 
     @JsonView(Views.Detailed.class)
     @PutMapping("/courses/{id}")
-    CourseDto updateCourse(@RequestBody CourseDto courseDto, @PathVariable String id) throws UnknownEntityException {
-        this.courseService.readById(id);                // Reading the course just to make sure that it exists
+    CourseDto updateCourse(@RequestBody CourseDto courseDto, @PathVariable String id) throws EntityStateException {
         Course c = CourseConverter.toModel(courseDto);
         this.courseService.update(c);
-        return courseDto;
+        return CourseConverter.fromModel(this.courseService.readById(c.getID()).get());
     }
 
     @JsonView(Views.Detailed.class)
@@ -64,11 +65,12 @@ class CourseController {
 
     @GetMapping("/courses/{id}/schedule")
     ClassInterval [] getSchedule(@PathVariable String id) throws UnknownEntityException {
-        Course c = this.courseService.readById(id);
-        return c.getSchedule();
+        Optional<Course> c = this.courseService.readById(id);
+        if (c.isEmpty()) throw new UnknownEntityException(id);
+        return c.get().getSchedule();
     }
 
-    @PostMapping("/courses/{id}/schedule")
+    /*@PostMapping("/courses/{id}/schedule")
     ClassInterval [] addSchedule(@RequestBody ClassIntervalDto interval, @PathVariable String id) throws UnknownEntityException {
         ClassInterval ci = CourseConverter.intervalToModel(interval);
         if (this.courseService.addSchedule(id, ci)){
@@ -86,7 +88,7 @@ class CourseController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified timetable could not be found.");
         }
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-    }
+    }*/
 
     @GetMapping("/courses/{id}/teachers")
     Collection<TeacherDto> getTeachersInCourse(@PathVariable String id) throws EntityStateException {

@@ -1,31 +1,57 @@
 package me.raulbalanza.tjv.school_enrollment.domain;
 
+import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
+@Entity
 public class ClassInterval {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_1")
+    @SequenceGenerator(name = "seq_1", sequenceName = "seq_1", allocationSize = 1)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     private DayOfWeek day;
     private LocalTime start;
-    private LocalTime end;
+    private LocalTime finish;
 
     public ClassInterval(DayOfWeek d, int hStart, int mStart, int hEnd, int mEnd){
-        this.day = d;
+        this.day = Objects.requireNonNull(d);
         this.start = LocalTime.of(hStart, mStart);
-        this.end = LocalTime.of(hEnd, mEnd);
+        this.finish = LocalTime.of(hEnd, mEnd);
     }
+
+    public ClassInterval() { }
 
     public DayOfWeek getDay() {
         return day;
+    }
+
+    public void setDay(DayOfWeek day) {
+        this.day = day;
+    }
+
+    public void setStart(LocalTime start) {
+        this.start = start;
+    }
+
+    public void setFinish(LocalTime end) {
+        this.finish = end;
     }
 
     public LocalTime getStart() {
         return start;
     }
 
-    public LocalTime getEnd() {
-        return end;
+    public LocalTime getFinish() {
+        return finish;
     }
 
     public boolean overlaps(ClassInterval ci){
@@ -34,8 +60,8 @@ public class ClassInterval {
 
             // (StartA < EndB) and (EndA > StartB)
 
-            return this.start.toSecondOfDay() < ci.end.toSecondOfDay()
-                    && this.end.toSecondOfDay() > ci.start.toSecondOfDay();
+            return this.start.toSecondOfDay() < ci.finish.toSecondOfDay()
+                    && this.finish.toSecondOfDay() > ci.start.toSecondOfDay();
 
         } else return false;
 
@@ -44,14 +70,14 @@ public class ClassInterval {
     @Override
     public boolean equals(Object o){
         if (o instanceof ClassInterval c){
-            return day.equals(c.day) && this.start.equals(c.start) && this.end.equals(c.end);
+            return day.equals(c.day) && this.start.equals(c.start) && this.finish.equals(c.finish);
         } else return false;
     }
 
     @Override
     public String toString(){
         return day.name() + " - " + this.start.format(DateTimeFormatter.ISO_LOCAL_TIME) +
-                " to " + this.end.format(DateTimeFormatter.ISO_LOCAL_TIME);
+                " to " + this.finish.format(DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
 }

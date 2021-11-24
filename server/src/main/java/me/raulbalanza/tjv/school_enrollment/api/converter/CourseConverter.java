@@ -27,7 +27,7 @@ public class CourseConverter {
     }
 
     public static ClassIntervalDto intervalFromModel(ClassInterval classInterval) {
-        return new ClassIntervalDto(classInterval.getDay(), classInterval.getStart(), classInterval.getEnd());
+        return new ClassIntervalDto(classInterval.getDay(), classInterval.getStart(), classInterval.getFinish());
     }
 
     public static ClassInterval intervalToModel(ClassIntervalDto classIntervalDto) {

@@ -15,14 +15,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Handle unknown entities
     @ExceptionHandler(UnknownEntityException.class)
-    public ResponseEntity<Object> handleNoDataFoundException(UnknownEntityException ex, WebRequest request) {
+    public ResponseEntity<?> handleNoDataFoundException(UnknownEntityException ex, WebRequest request) {
 
         return new ResponseEntity<>("The entity was not found", HttpStatus.NOT_FOUND);
     }
 
     // Handle conflicting entities
     @ExceptionHandler(EntityStateException.class)
-    public ResponseEntity<Object> handleNoDataFoundException(EntityStateException ex, WebRequest request) {
+    public ResponseEntity<?> handleNoDataFoundException(EntityStateException ex, WebRequest request) {
 
         return new ResponseEntity<>("The entity already exists", HttpStatus.CONFLICT);
     }
