@@ -6,4 +6,4 @@ build-and-test-server:
         - gradle build
     artifacts:
         paths:
-            - build/libs/*.jar
+            - server/build/libs/*.jar

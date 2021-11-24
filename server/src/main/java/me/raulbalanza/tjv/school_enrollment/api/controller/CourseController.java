@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.parser.Entity;
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -31,9 +32,10 @@ class CourseController {
 
     @JsonView(Views.Basic.class)
     @GetMapping("/courses")
-    Collection<CourseDto> getAll(@RequestParam(defaultValue = "-1") String max_credits, @RequestParam(defaultValue = "0") String min_free_capacity) {
+    Collection<CourseDto> getAll(@RequestParam(defaultValue = "-1") String max_credits,
+                                 @RequestParam(defaultValue = "0") String min_free_capacity) throws InvalidParameterException {
         // This will return all courses taking into account restrictions of the query parameters
-        return CourseConverter.fromCollection(this.courseService.readAll());
+        return CourseConverter.fromCollection(this.courseService.readAllFiltered(max_credits, min_free_capacity));
     }
 
     @PostMapping("/courses")

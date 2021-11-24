@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.security.InvalidParameterException;
 import java.util.Map;
 
 @ControllerAdvice
@@ -34,6 +35,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 "error", "Conflicting entity",
                 "message", ex.getMessage()
         ), HttpStatus.CONFLICT);
+
+    }
+
+    // Handle conflicting entities
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<?> handleInvalidParameters(InvalidParameterException ex, WebRequest request) {
+
+        return new ResponseEntity<>(Map.of(
+                "error", "Invalid values for the provided parameters",
+                "message", ex.getMessage()
+        ), HttpStatus.BAD_REQUEST);
 
     }
 

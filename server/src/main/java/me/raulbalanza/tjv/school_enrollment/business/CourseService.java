@@ -5,7 +5,11 @@ import me.raulbalanza.tjv.school_enrollment.dao.CourseRepository;
 import me.raulbalanza.tjv.school_enrollment.domain.ClassInterval;
 import me.raulbalanza.tjv.school_enrollment.domain.Course;
 import org.springframework.stereotype.Component;
+
 import javax.transaction.Transactional;
+import java.security.InvalidParameterException;
+import java.util.Collection;
+import java.util.Collections;
 
 @Component
 public class CourseService extends CrudService<String, Course, CourseRepository> {
@@ -21,6 +25,26 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
 
     protected boolean exists(Course entity) {
         return repository.existsById(entity.getID());
+    }
+
+    public Collection<Course> readAllFiltered(String max_credits, String min_free_capacity) throws InvalidParameterException {
+
+        try {
+            int maxCreds = Integer.parseInt(max_credits);
+            int minCap = Integer.parseInt(min_free_capacity);
+
+            if (maxCreds < -1 || minCap < 0)
+                throw new InvalidParameterException("The provided values must be positive integer numbers.");
+
+            if (maxCreds == -1 && minCap == 0) return this.readAll();
+            else if (maxCreds != -1 && minCap == 0) return this.repository.readAllFilterCredits(maxCreds);
+            else if (maxCreds == -1 && minCap != 0) return this.repository.readAllFilterCapacity(minCap);
+            else return this.repository.readAllFilterCreditsCapacity(maxCreds, minCap);
+
+        } catch (NumberFormatException e) {
+            throw new InvalidParameterException("The provided values must be positive integer numbers.");
+        }
+
     }
 
     @Transactional
