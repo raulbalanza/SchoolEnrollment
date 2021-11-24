@@ -4,5 +4,5 @@ build-and-test-server:
     script:
         - gradle build
     artifacts:
-        - paths:
+        paths:
             - build/libs/*.jar
