@@ -2,6 +2,7 @@
 build-and-test-server:
     image: gradle:7-jdk17-alpine
     script:
+        - cd server
         - gradle build
     artifacts:
         paths:
