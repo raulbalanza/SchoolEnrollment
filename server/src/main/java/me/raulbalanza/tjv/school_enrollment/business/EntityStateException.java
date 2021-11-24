@@ -6,7 +6,7 @@ package me.raulbalanza.tjv.school_enrollment.business;
 public class EntityStateException extends Exception {
     public EntityStateException() { }
 
-    public <E> EntityStateException(E entity) {
-        super("Entity " + entity + " has an invalid state");
+    public EntityStateException(String msg) {
+        super(msg);
     }
 }

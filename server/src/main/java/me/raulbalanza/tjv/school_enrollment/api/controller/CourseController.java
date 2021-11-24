@@ -3,15 +3,19 @@ package me.raulbalanza.tjv.school_enrollment.api.controller;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.fasterxml.jackson.annotation.JsonView;
 import me.raulbalanza.tjv.school_enrollment.api.converter.CourseConverter;
+import me.raulbalanza.tjv.school_enrollment.api.converter.TeacherConverter;
 import me.raulbalanza.tjv.school_enrollment.business.EntityStateException;
 import me.raulbalanza.tjv.school_enrollment.business.CourseService;
 import me.raulbalanza.tjv.school_enrollment.business.UnknownEntityException;
 import me.raulbalanza.tjv.school_enrollment.domain.ClassInterval;
 import me.raulbalanza.tjv.school_enrollment.domain.Course;
+import org.aspectj.apache.bcel.classfile.Unknown;
+import org.hibernate.event.internal.EntityState;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -43,69 +47,64 @@ class CourseController {
     @JsonView(Views.Detailed.class)
     @GetMapping("/courses/{id}")
     CourseDto getOne(@PathVariable String id) throws UnknownEntityException {
-        Optional<Course> c = this.courseService.readById(id);
-        if (c.isEmpty()) throw new UnknownEntityException(id);
-        return CourseConverter.fromModel(c.get());
+        Course c = this.courseService.readById(id);
+        return CourseConverter.fromModel(c);
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/courses/{id}")
-    CourseDto updateCourse(@RequestBody CourseDto courseDto, @PathVariable String id) throws EntityStateException {
+    @PutMapping("/courses") // Update using the ID attribute of JSON, id cannot be changed
+    CourseDto updateCourse(@RequestBody CourseDto courseDto) throws UnknownEntityException {
         Course c = CourseConverter.toModel(courseDto);
         this.courseService.update(c);
-        return CourseConverter.fromModel(this.courseService.readById(c.getID()).get());
+        return CourseConverter.fromModel(this.courseService.readById(c.getID()));
     }
 
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/courses/{id}")
     void deleteCourse(@PathVariable String id) throws UnknownEntityException {
+        this.courseService.readById(id); // Read first to check if it exists
         this.courseService.deleteById(id);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/courses/{id}/schedule")
     ClassInterval [] getSchedule(@PathVariable String id) throws UnknownEntityException {
-        Optional<Course> c = this.courseService.readById(id);
-        if (c.isEmpty()) throw new UnknownEntityException(id);
-        return c.get().getSchedule();
+        Course c = this.courseService.readById(id);
+        return c.getSchedule();
     }
 
-    /*@PostMapping("/courses/{id}/schedule")
-    ClassInterval [] addSchedule(@RequestBody ClassIntervalDto interval, @PathVariable String id) throws UnknownEntityException {
-        ClassInterval ci = CourseConverter.intervalToModel(interval);
-        if (this.courseService.addSchedule(id, ci)){
-            Course c = this.courseService.readById(id);
-            return c.getSchedule();
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "The proposed schedule overlaps with the previous timetable.");
-        }
+    @PostMapping("/courses/{id}/schedule")
+    ClassInterval [] addSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws EntityStateException, UnknownEntityException {
+        this.courseService.addSchedule(id, ci);
+        Course c = this.courseService.readById(id);
+        return c.getSchedule();
     }
 
     @DeleteMapping("/courses/{id}/schedule")
-    void deleteSchedule(@RequestBody ClassIntervalDto interval, @PathVariable String id) throws UnknownEntityException {
-        ClassInterval ci = CourseConverter.intervalToModel(interval);
-        if (!this.courseService.removeSchedule(id, ci)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified timetable could not be found.");
-        }
+    void deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
+        this.courseService.removeSchedule(id, ci);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-    }*/
+    }
 
+    @JsonView(Views.Basic.class)
     @GetMapping("/courses/{id}/teachers")
-    Collection<TeacherDto> getTeachersInCourse(@PathVariable String id) throws EntityStateException {
-        // This will return the list of the teachers that teach the course
-        return Collections.EMPTY_LIST;
+    Collection<TeacherDto> getTeachersInCourse(@PathVariable String id) throws UnknownEntityException {
+        Course c = this.courseService.readById(id);
+        return TeacherConverter.fromCollection(c.getTeachers());
     }
 
+    @JsonView(Views.Basic.class)
     @PostMapping("/courses/{id}/teachers/{username}")
-    Collection<CourseDto> teachCourse(@PathVariable String username, @PathVariable String id) throws EntityStateException {
-        // This will add the teacher to the course and then return the list of the taught courses
-        return Collections.EMPTY_LIST;
+    Collection<TeacherDto> teachCourse(@PathVariable String username, @PathVariable String id) throws UnknownEntityException, EntityStateException {
+        this.courseService.addTeacher(id, username);
+        return TeacherConverter.fromCollection(this.courseService.readById(id).getTeachers());
     }
 
+    @JsonView(Views.Basic.class)
     @DeleteMapping("/courses/{id}/teachers/{username}")
-    Collection<CourseDto> removeCourse(@PathVariable String username, @PathVariable String id) throws EntityStateException {
-        // This will remove the teacher from the course and then return the list of the taught courses
-        return Collections.EMPTY_LIST;
+    Collection<TeacherDto> removeCourse(@PathVariable String username, @PathVariable String id) throws UnknownEntityException, EntityStateException {
+        this.courseService.removeTeacher(id, username);
+        return TeacherConverter.fromCollection(this.courseService.readById(id).getTeachers());
     }
 
 }

@@ -23,12 +23,7 @@ public class Student {
     protected LocalDateTime registeredAt;
     protected int currentYear;
 
-    @ManyToMany
-    @JoinTable(
-            name = "enrolled_courses",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+    @ManyToMany(mappedBy = "students")
     private Collection<Course> enrolledCourses = new ArrayList<Course>();;
 
     public Student(String username, String ID, String password, String email, String name, String surnames, LocalDate birthDate, int currentYear) {

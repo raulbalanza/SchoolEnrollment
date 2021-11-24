@@ -25,12 +25,14 @@ public abstract class CrudService<K, E, R extends JpaRepository<E, K>> {
     @Transactional
     public void create(E entity) throws EntityStateException {
         if (this.exists(entity))
-            throw new EntityStateException(entity);
+            throw new EntityStateException("An entity with that ID already exists.");
         repository.save(entity);
     }
 
-    public Optional<E> readById(K id) {
-        return repository.findById(id);
+    public E readById(K id) throws UnknownEntityException {
+        Optional<E> obj = repository.findById(id);
+        if (obj.isEmpty()) throw new UnknownEntityException("An entity with ID " + id.toString() + " does not exist.");
+        return obj.get();
     }
 
     public Collection<E> readAll() {
@@ -39,11 +41,11 @@ public abstract class CrudService<K, E, R extends JpaRepository<E, K>> {
 
     // Replace a stored entity
     @Transactional
-    public void update(E entity) throws EntityStateException {
+    public void update(E entity) throws UnknownEntityException {
         if (this.exists(entity))
             repository.save(entity);
         else
-            throw new EntityStateException(entity);
+            throw new UnknownEntityException("An entity with that ID does not exist.");
     }
 
     public void deleteById(K id) {

@@ -1,8 +1,6 @@
 package me.raulbalanza.tjv.school_enrollment.api.converter;
 
-import me.raulbalanza.tjv.school_enrollment.api.controller.ClassIntervalDto;
 import me.raulbalanza.tjv.school_enrollment.api.controller.CourseDto;
-import me.raulbalanza.tjv.school_enrollment.domain.ClassInterval;
 import me.raulbalanza.tjv.school_enrollment.domain.Course;
 
 import java.util.ArrayList;
@@ -24,15 +22,6 @@ public class CourseConverter {
             res.add(fromModel(c));
         }
         return res;
-    }
-
-    public static ClassIntervalDto intervalFromModel(ClassInterval classInterval) {
-        return new ClassIntervalDto(classInterval.getDay(), classInterval.getStart(), classInterval.getFinish());
-    }
-
-    public static ClassInterval intervalToModel(ClassIntervalDto classIntervalDto) {
-        return new ClassInterval(classIntervalDto.day, classIntervalDto.start.getHour(), classIntervalDto.start.getMinute(),
-                classIntervalDto.end.getHour(), classIntervalDto.end.getMinute());
     }
 
 }

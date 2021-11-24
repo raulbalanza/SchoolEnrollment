@@ -1,6 +1,7 @@
 package me.raulbalanza.tjv.school_enrollment.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import me.raulbalanza.tjv.school_enrollment.api.converter.CourseConverter;
 import me.raulbalanza.tjv.school_enrollment.api.converter.StudentConverter;
 import me.raulbalanza.tjv.school_enrollment.business.EntityStateException;
 import me.raulbalanza.tjv.school_enrollment.business.StudentService;
@@ -22,7 +23,7 @@ class StudentController {
         this.studentService = studentService;
     }
 
-    /*@JsonView(Views.Basic.class)
+    @JsonView(Views.Basic.class)
     @GetMapping("/students")
     Collection<StudentDto> getAll() {
         return StudentConverter.fromCollection(this.studentService.readAll());
@@ -46,35 +47,38 @@ class StudentController {
     @JsonView(Views.Detailed.class)
     @PutMapping("/students/{username}")
     StudentDto updateStudent(@RequestBody StudentDto studentDto, @PathVariable String username) throws UnknownEntityException {
-        this.studentService.readById(username);             // Reading the element just to make sure that it exists
         Student st = StudentConverter.toModel(studentDto);
         this.studentService.update(st);
-        return studentDto;
+        return StudentConverter.fromModel(this.studentService.readById(st.getUsername()));
     }
 
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/students/{username}")
     void deleteStudent(@PathVariable String username) throws UnknownEntityException {
+        this.studentService.readById(username); // Read first to make sure that it exists
         this.studentService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
+    @JsonView(Views.Basic.class)
     @GetMapping("/students/{username}/courses")
-    Collection<CourseDto> getEnrolledCourses(@PathVariable String username) throws EntityStateException {
-        // This will return the list of the enrolled courses of the student (if any)
-        return Collections.EMPTY_LIST;
+    Collection<CourseDto> getEnrolledCourses(@PathVariable String username) throws UnknownEntityException {
+        Student s = this.studentService.readById(username);
+        return CourseConverter.fromCollection(s.getEnrolledCourses());
     }
 
+    @JsonView(Views.Basic.class)
     @PostMapping("/students/{username}/courses/{course_id}")
-    Collection<CourseDto> enrollInCourse(@PathVariable String username, @PathVariable String course_id) throws EntityStateException {
-        // This will enroll the student in a subject and then return the list of the enrolled courses
-        return Collections.EMPTY_LIST;
+    Collection<CourseDto> enrollInCourse(@PathVariable String username, @PathVariable String course_id) throws UnknownEntityException, EntityStateException {
+        this.studentService.enrollCourse(username, course_id);
+        return CourseConverter.fromCollection(this.studentService.readById(username).getEnrolledCourses());
     }
 
+    @JsonView(Views.Basic.class)
     @DeleteMapping("/students/{username}/courses/{course_id}")
-    Collection<CourseDto> removeFromCourse(@PathVariable String username, @PathVariable String course_id) throws EntityStateException {
-        // This will remove the student from a subject and then return the list of the enrolled courses
-        return Collections.EMPTY_LIST;
-    }*/
+    Collection<CourseDto> removeFromCourse(@PathVariable String username, @PathVariable String course_id) throws UnknownEntityException, EntityStateException {
+        this.studentService.abandonCourse(username, course_id);
+        return CourseConverter.fromCollection(this.studentService.readById(username).getEnrolledCourses());
+    }
 
 }

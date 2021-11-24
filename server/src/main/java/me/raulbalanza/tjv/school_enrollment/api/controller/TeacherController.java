@@ -25,7 +25,7 @@ class TeacherController {
         this.teacherService = teacherService;
     }
 
-    /*@JsonView(Views.Basic.class)
+    @JsonView(Views.Basic.class)
     @GetMapping("/teachers")
     Collection<TeacherDto> getAll() {
         return TeacherConverter.fromCollection(this.teacherService.readAll());
@@ -47,19 +47,19 @@ class TeacherController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/teachers/{username}")
-    TeacherDto updateUser(@RequestBody TeacherDto teacherDto, @PathVariable String username) throws UnknownEntityException {
-        this.teacherService.readById(username);             // Reading the element just to make sure that it exists
+    @PutMapping("/teachers")
+    TeacherDto updateUser(@RequestBody TeacherDto teacherDto) throws UnknownEntityException {
         Teacher t = TeacherConverter.toModel(teacherDto);
         this.teacherService.update(t);
-        return teacherDto;
+        return TeacherConverter.fromModel(this.teacherService.readById(t.getUsername()));
     }
 
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/teachers/{username}")
     void deleteUser(@PathVariable String username) throws UnknownEntityException {
+        this.teacherService.readById(username); // Read first to check that if exists
         this.teacherService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-    }*/
+    }
 
 }

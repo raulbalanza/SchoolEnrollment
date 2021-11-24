@@ -1,7 +1,6 @@
 package me.raulbalanza.tjv.school_enrollment.business;
 
 import me.raulbalanza.tjv.school_enrollment.dao.TeacherRepository;
-import me.raulbalanza.tjv.school_enrollment.domain.Student;
 import me.raulbalanza.tjv.school_enrollment.domain.Teacher;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +15,5 @@ public class TeacherService extends CrudService<String, Teacher, TeacherReposito
     protected boolean exists(Teacher entity) {
         return repository.existsById(entity.getUsername());
     }
-
 
 }

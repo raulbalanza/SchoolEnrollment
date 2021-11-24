@@ -1,11 +1,9 @@
 package me.raulbalanza.tjv.school_enrollment.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,9 +25,19 @@ public class Course {
     private Collection<ClassInterval> schedule = new ArrayList<ClassInterval>();
 
     @ManyToMany
+    @JoinTable(
+            name = "teaching_courses",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
     private Collection<Teacher> teachers = new ArrayList<Teacher>();
 
     @ManyToMany
+    @JoinTable(
+            name = "enrolled_courses",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private Collection<Student> students = new ArrayList<Student>();
 
     public Course(String ID, String name, int credits, int year, int capacity, LocalDate enrollLimit) {
@@ -128,4 +136,29 @@ public class Course {
         return res;
     }
 
+    @Override
+    public int hashCode() {
+        return this.ID.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        Course c = null;
+        if (!(obj instanceof Course)) return false;
+        else c = (Course) obj;
+
+        return this.ID.equals(c.ID) && this.name.equals(c.name);
+
+    }
+
+    @Override
+    public String toString() {
+        return "Course: " + this.name + " (" + this.ID + ")" +
+                "\n\t - Credits: " + this.name +
+                "\n\t - Capacity: " + this.capacity +
+                "\n\t - Enrolled students: " + this.students.size() +
+                "\n\t - Enroll limit: " + ((this.enrollLimit == null) ? "-" : this.enrollLimit.format(DateTimeFormatter.ISO_LOCAL_DATE)) +
+                "\n\t - Year: " + this.year;
+    }
 }
