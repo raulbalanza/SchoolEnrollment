@@ -1,0 +1,17 @@
+services:
+  server:
+    build: .
+    container_name: school_enrollment_server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://school_enrollment_db:5432/postgres"
+      - "SPRING_DATASOURCE_USERNAME=postgres"
+      - "SPRING_DATASOURCE_PASSWORD=raulproject"
+  database:
+    image: postgres:alpine
+    container_name: school_enrollment_db
+    environment:
+      - "POSTGRES_PASSWORD=raulproject"
