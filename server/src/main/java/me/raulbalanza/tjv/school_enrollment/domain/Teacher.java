@@ -34,7 +34,8 @@ public class Teacher {
     private Collection<Course> teachingCourses = new ArrayList<Course>();;
 
     public Teacher(String username, String ID, String password, String email, String name, String surnames, LocalDate birthDate, String rank) {
-        this.username = Objects.requireNonNull(username);
+        //this.username = Objects.requireNonNull(username);
+        this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;

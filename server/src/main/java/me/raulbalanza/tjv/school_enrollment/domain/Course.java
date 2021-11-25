@@ -47,7 +47,8 @@ public class Course {
     private Collection<Student> students = new ArrayList<Student>();
 
     public Course(String ID, String name, int credits, int year, int capacity, LocalDate enrollLimit) {
-        this.ID = Objects.requireNonNull(ID);
+        //this.ID = Objects.requireNonNull(ID);
+        this.ID = ID;
         this.name = name;
         this.credits = credits;
         this.year = year;
