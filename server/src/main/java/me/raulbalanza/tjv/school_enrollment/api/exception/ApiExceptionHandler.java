@@ -2,18 +2,15 @@ package me.raulbalanza.tjv.school_enrollment.api.exception;
 
 import me.raulbalanza.tjv.school_enrollment.business.EntityStateException;
 import me.raulbalanza.tjv.school_enrollment.business.UnknownEntityException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.Map;
 
 @ControllerAdvice

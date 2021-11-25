@@ -54,7 +54,7 @@ class CourseController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/courses") // Update using the ID attribute of JSON, id cannot be changed
+    @PutMapping("/courses") // Using ID from JSON
     CourseDto updateCourse(@RequestBody CourseDto courseDto) throws UnknownEntityException {
         Course c = CourseConverter.toModel(courseDto);
         this.courseService.update(c);

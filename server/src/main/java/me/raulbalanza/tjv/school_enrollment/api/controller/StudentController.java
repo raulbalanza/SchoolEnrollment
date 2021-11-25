@@ -45,8 +45,8 @@ class StudentController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/students/{username}")
-    StudentDto updateStudent(@RequestBody StudentDto studentDto, @PathVariable String username) throws UnknownEntityException {
+    @PutMapping("/students") // Using ID from JSON
+    StudentDto updateStudent(@RequestBody StudentDto studentDto) throws UnknownEntityException {
         Student st = StudentConverter.toModel(studentDto);
         this.studentService.update(st);
         return StudentConverter.fromModel(this.studentService.readById(st.getUsername()));

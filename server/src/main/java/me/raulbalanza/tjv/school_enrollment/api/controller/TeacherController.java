@@ -47,7 +47,7 @@ class TeacherController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/teachers")
+    @PutMapping("/teachers") // Using ID from JSON
     TeacherDto updateUser(@RequestBody TeacherDto teacherDto) throws UnknownEntityException {
         Teacher t = TeacherConverter.toModel(teacherDto);
         this.teacherService.update(t);
