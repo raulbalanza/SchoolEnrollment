@@ -1,6 +1,7 @@
 package me.raulbalanza.tjv.school_enrollment.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,13 +15,19 @@ public class Teacher {
     @Id
     protected String username;
 
+    @NotNull(message = "password")
     protected String password;
+    @NotNull(message = "ID")
     protected String ID;
+    @NotNull(message = "email")
     protected String email;
+    @NotNull(message = "name")
     protected String name;
+    @NotNull(message = "surnames")
     protected String surnames;
     protected LocalDate birthDate;
     protected LocalDateTime registeredAt;
+    @NotNull(message = "rank")
     protected String rank;
 
     @ManyToMany(mappedBy = "teachers")

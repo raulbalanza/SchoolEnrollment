@@ -3,6 +3,7 @@ package me.raulbalanza.tjv.school_enrollment.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +23,11 @@ public class ClassInterval {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @NotNull(message = "day")
     private DayOfWeek day;
+    @NotNull(message = "start")
     private LocalTime start;
+    @NotNull(message = "finish")
     private LocalTime finish;
 
     public ClassInterval(DayOfWeek d, int hStart, int mStart, int hEnd, int mEnd){

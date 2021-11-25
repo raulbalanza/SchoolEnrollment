@@ -1,6 +1,7 @@
 package me.raulbalanza.tjv.school_enrollment.business;
 
 import me.raulbalanza.tjv.school_enrollment.dao.StudentRepository;
+import me.raulbalanza.tjv.school_enrollment.domain.Course;
 import me.raulbalanza.tjv.school_enrollment.domain.Student;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +23,28 @@ public class StudentService extends CrudService<String, Student, StudentReposito
     }
 
     @Transactional
+    @Override
+    public void deleteById(String username) {
+
+        var student = this.repository.getById(username);
+
+        for (Course c: student.getEnrolledCourses()){
+            try { this.abandonCourse(username, c.getID()); }
+            catch (EntityStateException | UnknownEntityException e) { return; }
+        }
+
+        repository.deleteById(username);
+    }
+
+    @Transactional
     public void enrollCourse(String studentID, String courseID) throws EntityStateException, UnknownEntityException {
 
         var course = this.courseService.readById(courseID);
         var student = this.readById(studentID);
+
+        if (course.getStudents().size() >= course.getCapacity()){
+            throw new EntityStateException("The course " + course.getID() + " is full. Cannot add new students.");
+        }
 
         if (!course.getStudents().contains(student)){
             course.getStudents().add(student);

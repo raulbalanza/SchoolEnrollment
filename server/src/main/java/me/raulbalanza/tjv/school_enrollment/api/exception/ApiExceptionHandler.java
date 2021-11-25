@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Map;
 
 @ControllerAdvice
@@ -44,6 +47,35 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(Map.of(
                 "error", "Invalid values for the provided parameters",
+                "message", ex.getMessage()
+        ), HttpStatus.BAD_REQUEST);
+
+    }
+
+    // Handle missing attributes
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+
+        String wrongAttributes = "";
+
+        for (ConstraintViolation cv : ex.getConstraintViolations()){
+            if (!wrongAttributes.isEmpty()) wrongAttributes += ", ";
+            wrongAttributes += cv.getMessage();
+        }
+
+        return new ResponseEntity<>(Map.of(
+                "error", "Missing or invalid values for one or more attributes",
+                "message", "Incorrect attributes: " + wrongAttributes
+        ), HttpStatus.BAD_REQUEST);
+
+    }
+
+    // Handle illegal arguments
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleConstraintViolation(IllegalArgumentException ex, WebRequest request) {
+
+        return new ResponseEntity<>(Map.of(
+                "error", "Illegal argument provided",
                 "message", ex.getMessage()
         ), HttpStatus.BAD_REQUEST);
 
