@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -47,9 +48,11 @@ class TeacherController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/teachers") // Using ID from JSON
-    TeacherDto updateUser(@RequestBody TeacherDto teacherDto) throws UnknownEntityException {
+    @PutMapping("/teachers/{username}")
+    TeacherDto updateUser(@RequestBody TeacherDto teacherDto, @PathVariable String username) throws UnknownEntityException, InvalidParameterException {
         Teacher t = TeacherConverter.toModel(teacherDto);
+        if (t.getUsername() == null || !t.getUsername().equals(username))
+            throw new InvalidParameterException("The username provided in the URI does not match the one in the request body");
         this.teacherService.update(t);
         return TeacherConverter.fromModel(this.teacherService.readById(t.getUsername()));
     }
@@ -57,7 +60,6 @@ class TeacherController {
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/teachers/{username}")
     void deleteUser(@PathVariable String username) throws UnknownEntityException {
-        this.teacherService.readById(username); // Read first to check that if exists
         this.teacherService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }

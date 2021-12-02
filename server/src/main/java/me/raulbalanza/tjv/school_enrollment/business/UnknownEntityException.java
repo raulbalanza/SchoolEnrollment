@@ -5,8 +5,6 @@ package me.raulbalanza.tjv.school_enrollment.business;
  */
 public class UnknownEntityException extends Exception {
 
-    public UnknownEntityException() { }
-
     public UnknownEntityException(String msg) {
         super(msg);
     }

@@ -57,7 +57,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         for (ConstraintViolation cv : ex.getConstraintViolations()){
             if (!wrongAttributes.isEmpty()) wrongAttributes += ", ";
-            wrongAttributes += cv.getMessage();
+
+            String attributeName = null;
+            for (var node : cv.getPropertyPath()) {
+                attributeName = node.getName();
+            }
+            wrongAttributes += "'" + attributeName + "' " + cv.getMessage();
         }
 
         return new ResponseEntity<>(Map.of(

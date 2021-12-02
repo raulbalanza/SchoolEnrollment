@@ -48,7 +48,10 @@ public abstract class CrudService<K, E, R extends JpaRepository<E, K>> {
             throw new UnknownEntityException("An entity with that ID does not exist.");
     }
 
-    public void deleteById(K id) {
+    public void deleteById(K id) throws UnknownEntityException {
+        Optional<E> entity = repository.findById(id);
+        if (entity.isEmpty())
+            throw new UnknownEntityException("An entity with ID " + id.toString() + " does not exist.");
         repository.deleteById(id);
     }
 }

@@ -20,16 +20,16 @@ public class TeacherService extends CrudService<String, Teacher, TeacherReposito
 
     @Transactional
     @Override
-    public void deleteById(String username) {
+    public void deleteById(String username) throws UnknownEntityException {
 
-        var teacher = this.repository.getById(username);
+        var teacher = this.readById(username);
 
         for (Course c: teacher.getTeachingCourses()){
             c.getTeachers().remove(teacher);
             this.courseRepository.save(c);
         }
 
-        repository.deleteById(username);
+        super.deleteById(username);
 
     }
 

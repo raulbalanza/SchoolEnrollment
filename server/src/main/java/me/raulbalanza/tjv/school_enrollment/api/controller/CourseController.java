@@ -54,9 +54,11 @@ class CourseController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/courses") // Using ID from JSON
-    CourseDto updateCourse(@RequestBody CourseDto courseDto) throws UnknownEntityException {
+    @PutMapping("/courses/{id}")
+    CourseDto updateCourse(@RequestBody CourseDto courseDto, @PathVariable String id) throws UnknownEntityException, InvalidParameterException {
         Course c = CourseConverter.toModel(courseDto);
+        if (c.getID() == null || !c.getID().equals(id))
+            throw new InvalidParameterException("The ID provided in the URI does not match the one in the request body");
         this.courseService.update(c);
         return CourseConverter.fromModel(this.courseService.readById(c.getID()));
     }
@@ -64,7 +66,6 @@ class CourseController {
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/courses/{id}")
     void deleteCourse(@PathVariable String id) throws UnknownEntityException {
-        this.courseService.readById(id); // Read first to check if it exists
         this.courseService.deleteById(id);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }

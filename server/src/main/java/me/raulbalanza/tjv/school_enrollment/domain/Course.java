@@ -2,6 +2,8 @@ package me.raulbalanza.tjv.school_enrollment.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,15 +18,18 @@ public class Course {
     @Id
     private String ID;
 
-    @NotNull(message = "name")
+    @NotNull
     private String name;
-    @NotNull(message = "credits")
+    @NotNull
+    @Positive
     private int credits;
-    @NotNull(message = "year")
+    @NotNull
+    @Positive
     private int year;
-    @NotNull(message = "capacity")
+    @NotNull
+    @Positive
     private int capacity;
-    @NotNull(message = "enrollLimit")
+    @NotNull
     private LocalDate enrollLimit;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "course")

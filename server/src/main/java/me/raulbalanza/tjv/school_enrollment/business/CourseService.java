@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.security.InvalidParameterException;
 import java.util.Collection;
-import java.util.Collections;
 
 @Component
 public class CourseService extends CrudService<String, Course, CourseRepository> {
@@ -25,6 +24,23 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
 
     protected boolean exists(Course entity) {
         return repository.existsById(entity.getID());
+    }
+
+    @Override
+    @Transactional
+    public void update(Course entity) throws UnknownEntityException {
+        var current = this.readById(entity.getID());
+
+        // Update attributes: name, credits, year, capacity, enrollLimit
+        if (entity.getCapacity() >= current.getStudents().size()){
+            current.setCapacity(entity.getCapacity());
+        } else throw new InvalidParameterException("The new capacity is lower than the current number of enrolled students.");
+        if (entity.getName() != null) current.setName(entity.getName());
+        if (entity.getCredits() != 0) current.setCredits(entity.getCredits());
+        if (entity.getYear() != 0) current.setYear(entity.getYear());
+        if (entity.getEnrollLimit() != null) current.setEnrollLimit(entity.getEnrollLimit());
+
+        super.update(current);
     }
 
     public Collection<Course> readAllFiltered(String max_credits, String min_free_capacity) throws InvalidParameterException {

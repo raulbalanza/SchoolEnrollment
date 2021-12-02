@@ -2,6 +2,7 @@ package me.raulbalanza.tjv.school_enrollment.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,19 +16,20 @@ public class Student {
     @Id
     protected String username;
 
-    @NotNull(message = "password")
+    @NotNull
     protected String password;
-    @NotNull(message = "ID")
+    @NotNull
     protected String ID;
-    @NotNull(message = "email")
+    @NotNull
     protected String email;
-    @NotNull(message = "name")
+    @NotNull
     protected String name;
-    @NotNull(message = "surnames")
+    @NotNull
     protected String surnames;
     protected LocalDate birthDate;
     protected LocalDateTime registeredAt;
-    @NotNull(message = "currentYear")
+    @NotNull
+    @Positive
     protected int currentYear;
 
     @ManyToMany(mappedBy = "students")

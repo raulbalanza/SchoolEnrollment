@@ -24,16 +24,16 @@ public class StudentService extends CrudService<String, Student, StudentReposito
 
     @Transactional
     @Override
-    public void deleteById(String username) {
+    public void deleteById(String username) throws UnknownEntityException {
 
-        var student = this.repository.getById(username);
+        var student = this.readById(username);
 
         for (Course c: student.getEnrolledCourses()){
             try { this.abandonCourse(username, c.getID()); }
             catch (EntityStateException | UnknownEntityException e) { return; }
         }
 
-        repository.deleteById(username);
+        super.deleteById(username);
     }
 
     @Transactional

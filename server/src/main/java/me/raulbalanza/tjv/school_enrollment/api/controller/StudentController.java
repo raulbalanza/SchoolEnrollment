@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -45,9 +46,11 @@ class StudentController {
     }
 
     @JsonView(Views.Detailed.class)
-    @PutMapping("/students") // Using ID from JSON
-    StudentDto updateStudent(@RequestBody StudentDto studentDto) throws UnknownEntityException {
+    @PutMapping("/students/{username}")
+    StudentDto updateStudent(@RequestBody StudentDto studentDto, @PathVariable String username) throws UnknownEntityException, InvalidParameterException {
         Student st = StudentConverter.toModel(studentDto);
+        if (st.getUsername() == null || !st.getUsername().equals(username))
+            throw new InvalidParameterException("The username provided in the URI does not match the one in the request body");
         this.studentService.update(st);
         return StudentConverter.fromModel(this.studentService.readById(st.getUsername()));
     }
@@ -55,7 +58,6 @@ class StudentController {
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/students/{username}")
     void deleteStudent(@PathVariable String username) throws UnknownEntityException {
-        this.studentService.readById(username); // Read first to make sure that it exists
         this.studentService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
