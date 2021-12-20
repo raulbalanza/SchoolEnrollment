@@ -106,6 +106,9 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
     @Transactional
     public void addTeacher(String courseId, String teacherId) throws EntityStateException, UnknownEntityException {
 
+        if (courseId == null || teacherId == null)
+            throw new UnknownEntityException("One of the required entities was not provided.");
+
         var course = this.readById(courseId);
         var teacher = this.teacherService.readById(teacherId);
 
@@ -121,6 +124,9 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
 
     @Transactional
     public void removeTeacher(String courseId, String teacherId) throws EntityStateException, UnknownEntityException {
+
+        if (courseId == null || teacherId == null)
+            throw new UnknownEntityException("One of the required entities was not provided.");
 
         var course = this.readById(courseId);
         var teacher = this.teacherService.readById(teacherId);
