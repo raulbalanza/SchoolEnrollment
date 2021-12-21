@@ -1,42 +1,43 @@
-package me.raulbalanza.tjv.school_enrollment.api.controller;
+package me.raulbalanza.tjv.school_enrollment.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeacherDto {
 
     // These attributes are public because the DTO is just a transfer object. Wrong data will never get into the actual classes.
-    @JsonView(Views.Basic.class)
     public String username;
-
-    @JsonView(Views.Basic.class)
     public String ID;
-
-    @JsonView(Views.Detailed.class)
     public String email;
-
-    @JsonView(Views.Detailed.class)
     public String name;
-
-    @JsonView(Views.Detailed.class)
     public String surnames;
-
-    @JsonView(Views.Detailed.class)
     public String rank;
+    public String password = "default";
 
-    @JsonView(Views.Internal.class)
-    public String password;
-
-    @JsonView(Views.Detailed.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.M.yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public LocalDate birthDate;
 
+    public String errorMessage;
+
     public TeacherDto() { }
+
+    public TeacherDto(TeacherDto other, String errorM) {
+        if (other != null){
+            this.username = other.username;
+            this.ID = other.ID;
+            this.email = other.email;
+            this.name = other.name;
+            this.surnames = other.surnames;
+            this.rank = other.rank;
+            this.password = other.password;
+        }
+        this.errorMessage = errorM;
+    }
 
     public TeacherDto(String u, String ID, String p, String e, String n, String sn, LocalDate bD, String r) {
         username = u;

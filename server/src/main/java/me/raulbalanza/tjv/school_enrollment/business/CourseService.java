@@ -53,9 +53,9 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
                 throw new InvalidParameterException("The provided values must be positive integer numbers.");
 
             if (maxCreds == -1 && minCap == 0) return this.readAll();
-            else if (maxCreds != -1 && minCap == 0) return this.repository.readAllFilterCredits(maxCreds);
-            else if (maxCreds == -1 && minCap != 0) return this.repository.readAllFilterCapacity(minCap);
-            else return this.repository.readAllFilterCreditsCapacity(maxCreds, minCap);
+            else if (maxCreds != -1 && minCap == 0) return this.repository.findByCreditsLessThanEqual(maxCreds);
+            else if (maxCreds == -1 && minCap != 0) return this.repository.findByCapacityGreaterThanEqual(minCap);
+            else return this.repository.findByCreditsAndCapacity(maxCreds, minCap);
 
         } catch (NumberFormatException e) {
             throw new InvalidParameterException("The provided values must be positive integer numbers.");

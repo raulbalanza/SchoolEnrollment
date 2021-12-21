@@ -7,3 +7,13 @@ build-and-test-server:
     artifacts:
         paths:
             - server/build/libs/*.jar
+
+# CI to build the frontend
+build-client:
+    image: gradle:7-jdk17-alpine
+    script:
+        - cd client
+        - gradle build
+    artifacts:
+        paths:
+            - client/build/libs/*.jar

@@ -30,7 +30,7 @@ class CourseController {
         this.courseService = courseService;
     }
 
-    @JsonView(Views.Basic.class)
+    @JsonView(Views.Detailed.class)
     @GetMapping("/courses")
     Collection<CourseDto> getAll(@RequestParam(defaultValue = "-1") String max_credits,
                                  @RequestParam(defaultValue = "0") String min_free_capacity) throws InvalidParameterException {
@@ -84,8 +84,9 @@ class CourseController {
     }
 
     @DeleteMapping("/courses/{id}/schedule")
-    void deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
+    ClassInterval [] deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
         this.courseService.removeSchedule(id, ci);
+        Course c = this.courseService.readById(id);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
@@ -105,7 +106,7 @@ class CourseController {
 
     @JsonView(Views.Basic.class)
     @DeleteMapping("/courses/{id}/teachers/{username}")
-    Collection<TeacherDto> removeCourse(@PathVariable String username, @PathVariable String id) throws UnknownEntityException, EntityStateException {
+    Collection<TeacherDto> removeTeacherCourse(@PathVariable String username, @PathVariable String id) throws UnknownEntityException, EntityStateException {
         this.courseService.removeTeacher(id, username);
         return TeacherConverter.fromCollection(this.courseService.readById(id).getTeachers());
     }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,12 +54,13 @@ class CourseRepositoryTest {
     void tearDown() {
         // Clean DB after each test
         courseRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
     void readAllFilterCreditsCapacity() {
 
-        var res = this.courseRepository.readAllFilterCreditsCapacity(4, 10);
+        var res = this.courseRepository.findByCreditsAndCapacity(4, 10);
 
         for (Course c : List.of(c6)){ assertTrue(res.contains(c)); }
         for (Course c : List.of(c, c2, c3, c4, c5)){ assertFalse(res.contains(c)); }
@@ -74,7 +74,7 @@ class CourseRepositoryTest {
     @Test
     void readAllFilterCredits() {
 
-        var res = this.courseRepository.readAllFilterCredits(6);
+        var res = this.courseRepository.findByCreditsLessThanEqual(6);
         for (Course c : List.of(c, c3, c4, c6)){ assertTrue(res.contains(c)); }
         for (Course c : List.of(c2, c5)){ assertFalse(res.contains(c)); }
 
@@ -83,7 +83,7 @@ class CourseRepositoryTest {
     @Test
     void readAllFilterCapacity() {
 
-        var res = this.courseRepository.readAllFilterCapacity(10);
+        var res = this.courseRepository.findByCapacityGreaterThanEqual(10);
         for (Course c : List.of(c, c3, c6)){ assertTrue(res.contains(c)); }
         for (Course c : List.of(c2, c4, c5)){ assertFalse(res.contains(c)); }
 

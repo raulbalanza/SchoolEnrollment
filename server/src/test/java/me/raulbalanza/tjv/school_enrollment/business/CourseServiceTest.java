@@ -61,12 +61,12 @@ class CourseServiceTest {
         Mockito.when(teacherService.readById(t2.getUsername())).thenThrow(UnknownEntityException.class);
         Mockito.when(teacherService.readById(t3.getUsername())).thenReturn(t3);
         Mockito.when(courseRepository.findAll()).thenReturn(List.of(c));
-        Mockito.when(courseRepository.readAllFilterCredits(3)).thenReturn(empty);
-        Mockito.when(courseRepository.readAllFilterCredits(6)).thenReturn(List.of(c));
-        Mockito.when(courseRepository.readAllFilterCapacity(30)).thenReturn(empty);
-        Mockito.when(courseRepository.readAllFilterCapacity(40)).thenReturn(List.of(c));
-        Mockito.when(courseRepository.readAllFilterCreditsCapacity(3, 1)).thenReturn(empty);
-        Mockito.when(courseRepository.readAllFilterCreditsCapacity(6, 5)).thenReturn(List.of(c));
+        Mockito.when(courseRepository.findByCreditsLessThanEqual(3)).thenReturn(empty);
+        Mockito.when(courseRepository.findByCreditsLessThanEqual(6)).thenReturn(List.of(c));
+        Mockito.when(courseRepository.findByCapacityGreaterThanEqual(30)).thenReturn(empty);
+        Mockito.when(courseRepository.findByCapacityGreaterThanEqual(40)).thenReturn(List.of(c));
+        Mockito.when(courseRepository.findByCreditsAndCapacity(3, 1)).thenReturn(empty);
+        Mockito.when(courseRepository.findByCreditsAndCapacity(6, 5)).thenReturn(List.of(c));
 
         t.getTeachingCourses().add(c);
         c.getTeachers().add(t);
@@ -273,27 +273,27 @@ class CourseServiceTest {
 
         res = this.courseService.readAllFiltered("3", "0");
         assertTrue(res.isEmpty());
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCredits(3);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCreditsLessThanEqual(3);
 
         res = this.courseService.readAllFiltered("6", "0");
         assertTrue(res.contains(c));
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCredits(6);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCreditsLessThanEqual(6);
 
         res = this.courseService.readAllFiltered("-1", "30");
         assertTrue(res.isEmpty());
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCapacity(30);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCapacityGreaterThanEqual(30);
 
         res = this.courseService.readAllFiltered("-1", "40");
         assertTrue(res.contains(c));
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCapacity(40);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCapacityGreaterThanEqual(40);
 
         res = this.courseService.readAllFiltered("3", "1");
         assertTrue(res.isEmpty());
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCreditsCapacity(3, 1);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCreditsAndCapacity(3, 1);
 
         res = this.courseService.readAllFiltered("6", "5");
         assertTrue(res.contains(c));
-        Mockito.verify(courseRepository, Mockito.atLeast(1)).readAllFilterCreditsCapacity(6, 5);
+        Mockito.verify(courseRepository, Mockito.atLeast(1)).findByCreditsAndCapacity(6, 5);
 
     }
 

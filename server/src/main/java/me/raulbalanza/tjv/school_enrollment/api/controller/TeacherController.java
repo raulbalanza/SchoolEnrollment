@@ -26,7 +26,7 @@ class TeacherController {
         this.teacherService = teacherService;
     }
 
-    @JsonView(Views.Basic.class)
+    @JsonView(Views.Detailed.class)
     @GetMapping("/teachers")
     Collection<TeacherDto> getAll() {
         return TeacherConverter.fromCollection(this.teacherService.readAll());
@@ -49,7 +49,7 @@ class TeacherController {
 
     @JsonView(Views.Detailed.class)
     @PutMapping("/teachers/{username}")
-    TeacherDto updateUser(@RequestBody TeacherDto teacherDto, @PathVariable String username) throws UnknownEntityException, InvalidParameterException {
+    TeacherDto updateTeacher(@RequestBody TeacherDto teacherDto, @PathVariable String username) throws UnknownEntityException, InvalidParameterException {
         Teacher t = TeacherConverter.toModel(teacherDto);
         if (t.getUsername() == null || !t.getUsername().equals(username))
             throw new InvalidParameterException("The username provided in the URI does not match the one in the request body");
@@ -59,7 +59,7 @@ class TeacherController {
 
     @JsonView(Views.Detailed.class)
     @DeleteMapping("/teachers/{username}")
-    void deleteUser(@PathVariable String username) throws UnknownEntityException {
+    void deleteTeacher(@PathVariable String username) throws UnknownEntityException {
         this.teacherService.deleteById(username);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
