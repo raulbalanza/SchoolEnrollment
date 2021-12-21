@@ -1,50 +1,59 @@
-package me.raulbalanza.tjv.school_enrollment.api.controller;
+package me.raulbalanza.tjv.school_enrollment.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDto {
 
     // These attributes are public because the DTO is just a transfer object. Wrong data will never get into the actual classes.
-    @JsonView(Views.Basic.class)
     public String username;
-
-    @JsonView(Views.Basic.class)
     public String ID;
-
-    @JsonView(Views.Detailed.class)
     public String email;
-
-    @JsonView(Views.Detailed.class)
     public String name;
-
-    @JsonView(Views.Detailed.class)
     public String surnames;
-
-    @JsonView(Views.Detailed.class)
     public int currentYear;
+    public String password = "default";
 
-    @JsonView(Views.Internal.class)
-    public String password;
-
-    @JsonView(Views.Detailed.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.M.yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public LocalDate birthDate;
+
+    public String errorMessage;
 
     public StudentDto() { }
 
-    public StudentDto(String u, String ID, String p, String e, String n, String sn, LocalDate bD, int cY) {
+    public StudentDto(StudentDto other, String errorM) {
+        if (other != null){
+            this.username = other.username;
+            this.ID = other.ID;
+            this.email = other.email;
+            this.name = other.name;
+            this.surnames = other.surnames;
+            this.currentYear = other.currentYear;
+            this.password = other.password;
+        }
+        this.errorMessage = errorM;
+    }
+
+    public StudentDto(String u, String ID, String p, String e, String n, String sn, LocalDate bD, int r) {
         username = u;
         this.ID = ID;
         password = p;
         email = e;
         name = n;
         surnames = sn;
-        currentYear = cY;
+        currentYear = r;
         birthDate = bD;
+    }
+
+    public int getCurrentYear() {
+        return currentYear;
+    }
+
+    public void setCurrentYear(int currentYear) {
+        this.currentYear = currentYear;
     }
 
     public String getUsername() {
@@ -87,14 +96,6 @@ public class StudentDto {
         this.surnames = surnames;
     }
 
-    public int getCurrentYear() {
-        return currentYear;
-    }
-
-    public void setCurrentYear(int currentYear) {
-        this.currentYear = currentYear;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -110,5 +111,4 @@ public class StudentDto {
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
-
 }

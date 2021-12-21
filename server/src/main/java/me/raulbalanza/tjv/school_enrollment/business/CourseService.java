@@ -69,6 +69,9 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
         if (id == null || newCi == null)
             throw new UnknownEntityException("One of the required entities was not provided.");
 
+        if (newCi.getStart().compareTo(newCi.getFinish()) > 0)
+            throw new EntityStateException("The finish time is set before the starting time in the proposed schedule");
+
         var c = readById(id);
 
         for (ClassInterval ci : c.getSchedule()){

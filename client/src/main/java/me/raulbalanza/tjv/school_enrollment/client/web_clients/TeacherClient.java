@@ -17,7 +17,7 @@ public class TeacherClient {
         teacherWebClient = WebClient.create(baseUrl + "/teachers");
     }
 
-    public Flux<TeacherDto> readAllCourses(){
+    public Flux<TeacherDto> readAllTeachers(){
         return teacherWebClient.get()
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()

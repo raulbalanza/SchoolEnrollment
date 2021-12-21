@@ -230,9 +230,7 @@ class CourseControllerTest {
         mockMvc.perform(post("/courses/BIE-TJV/schedule").contentType("application/json").content(jsonInterval)
                 .accept("application/json"))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].day").value("MONDAY"));
-        Mockito.verify(courseService, Mockito.atLeast(1)).readById(c.getID());
+                .andExpect(jsonPath("$.day").value("MONDAY"));
         Mockito.verify(courseService, Mockito.atLeast(1)).addSchedule(c.getID(), ci);
 
     }
@@ -248,7 +246,7 @@ class CourseControllerTest {
 
         c.setSchedule(Collections.emptyList());
 
-        mockMvc.perform(delete("/courses/BIE-TJV/schedule").contentType("application/json").content(jsonInterval)
+        mockMvc.perform(put("/courses/BIE-TJV/schedule").contentType("application/json").content(jsonInterval)
                         .accept("application/json"))
                 .andExpect(status().is(204));
         Mockito.verify(courseService, Mockito.atLeast(1)).removeSchedule(c.getID(), ci);

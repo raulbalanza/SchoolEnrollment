@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" th:href="@{/favicon.ico}">
 
-    <title>School Enrollment | Courses</title>
+    <title>School Enrollment | Students</title>
 
     <link th:href="@{/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/style.css}" rel="stylesheet">
@@ -36,15 +36,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" th:href="@{/courses}">
+                <a class="nav-link" th:href="@{/courses}">
                   <span data-feather="book"></span>
-                  Courses <span class="sr-only">(current)</span>
+                  Courses
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" th:href="@{/students}">
+                <a class="nav-link active" th:href="@{/students}">
                   <span data-feather="users"></span>
-                  Students
+                  Students <span class="sr-only">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
@@ -60,31 +60,16 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">Courses</h1>
+            <h1 class="h2">Student courses</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-
-              <form method="post" action="#" th:action="@{'/courses/filter'}" th:object="${filterDto}">
-                <div class="btn-group mr-2">
-                  <div class="col">
-                    <label for="min_capacity" class="control-label mb-0"><small>Min. free capacity</small></label>
-                    <input class="form-control form-control-sm" th:field="*{min_free_capacity}" type="number" id="min_capacity" name="min_capacity" value="0" required>
-                  </div>
-                  <div class="col">
-                    <label for="max_credits" class="control-label mb-0"><small>Max. credits</small></label>
-                    <input class="form-control form-control-sm" th:field="*{max_credits}" type="number" id="max_credits" name="max_credits" value="-1" required>
-                  </div>
-                  <div class="col"><button class="btn btn-sm btn-outline-secondary" type="submit">Filter</button></div>
-                </div>
-              </form>
-              <a th:href="@{/courses}"><button class="btn btn-sm btn-outline-secondary">Clear filter</button></a>
-              <a th:href="@{/courses/create}"><button class="btn btn-sm btn-outline-success">
+              <a th:href="@{'/students/courses/' + ${studentID} + '/create'}"><button class="btn btn-sm btn-outline-success">
                 <span data-feather="plus"></span>
-                Create new
+                New enrollment
               </button></a>
             </div>
           </div>
 
-          <h4 class="mb-3">Course list</h4>
+          <h4 class="mb-3">Courses of <span th:text="${studentID}"></span></h4>
           <div class="table-responsive">
 
             <div th:unless="${#lists.isEmpty(courses)}">
@@ -94,38 +79,27 @@
             </div>
 
             <div th:if="${#lists.isEmpty(courses)}" class="alert alert-warning" role="alert">
-              There are no courses matching the specified criteria.
+              The student <span th:text="${studentID}">USERNAME</span> is not enrolled in any course.
             </div>
 
             <div th:unless="${#lists.isEmpty(courses)}">
               <table th:unless="${courses[0].errorMessage}" class="table table-striped table-sm">
                 <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Credits</th>
-                    <th>Year</th>
-                    <th>Capacity</th>
-                    <th>Enroll limit</th>
-                    <th></th>
-                  </tr>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="course : ${courses}">
-                    <td th:text="${course.ID}">Course ID</td>
-                    <td th:text="${course.name}">Name</td>
-                    <td th:text="${course.credits}">Credits</td>
-                    <td th:text="${course.year}">Year</td>
-                    <td th:text="${course.capacity}">Capacity</td>
-                    <td th:text="${course.enrollLimit}">2000-01-30</td>
-                    <td>
-                      <a th:href="@{'/courses/teachers/' + ${course.ID}}"><button type="button" alt="Teachers" class="btn btn-warning"><span data-feather="award"></span></button></a>
-                      <a th:href="@{'/courses/schedule/' + ${course.ID}}"><button type="button" alt="Schedule" class="btn btn-success"><span data-feather="calendar"></span></button></a>
-                      <a th:href="@{'/courses/edit/' + ${course.ID}}"><button type="button" alt="Edit" class="btn btn-primary"><span data-feather="edit"></span></button></a>
-                      <a th:href="@{'/courses/delete/' + ${course.ID}}"><button type="button" alt="Delete" class="btn btn-danger"><span data-feather="x"></span></button></a>
-                    </td>
-                  </tr>
-              </tbody>
+                <tr th:each="course : ${courses}">
+                  <td th:text="${course.ID}">Course ID</td>
+                  <td th:text="${course.name}">Name</td>
+                  <td>
+                    <a th:href="@{'/students/courses/' + ${studentID} + '/delete/' + ${course.ID}}"><button type="button" alt="Delete" class="btn btn-danger"><span data-feather="x"></span></button></a>
+                  </td>
+                </tr>
+                </tbody>
             </table>
           </div>
         </div>

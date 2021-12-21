@@ -24,7 +24,7 @@ class StudentController {
         this.studentService = studentService;
     }
 
-    @JsonView(Views.Basic.class)
+    @JsonView(Views.Detailed.class)
     @GetMapping("/students")
     Collection<StudentDto> getAll() {
         return StudentConverter.fromCollection(this.studentService.readAll());

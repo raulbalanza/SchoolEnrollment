@@ -77,16 +77,14 @@ class CourseController {
     }
 
     @PostMapping("/courses/{id}/schedule")
-    ClassInterval [] addSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws EntityStateException, UnknownEntityException {
+    ClassInterval addSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws EntityStateException, UnknownEntityException {
         this.courseService.addSchedule(id, ci);
-        Course c = this.courseService.readById(id);
-        return c.getSchedule();
+        return ci;
     }
 
-    @DeleteMapping("/courses/{id}/schedule")
-    ClassInterval [] deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
+    @PutMapping("/courses/{id}/schedule")
+    void deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
         this.courseService.removeSchedule(id, ci);
-        Course c = this.courseService.readById(id);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 

@@ -29,7 +29,7 @@ public class TeacherWebController {
 
     @GetMapping("/teachers")
     public String getAll(Model model){
-        model.addAttribute("teachers", teacherClient.readAllCourses());
+        model.addAttribute("teachers", teacherClient.readAllTeachers());
         return "teachers";
     }
 
@@ -62,14 +62,14 @@ public class TeacherWebController {
     }
 
     @GetMapping("/teachers/edit/{username}")
-    public String editCourseRender(Model model, @PathVariable String username){
+    public String editTeacherRender(Model model, @PathVariable String username){
         model.addAttribute("view", "edit");
         model.addAttribute("teacherDto", teacherClient.getOne(username).onErrorReturn(new TeacherDto(null, NOT_FOUND_MSG)));
         return "editTeacher";
     }
 
     @PostMapping("/teachers/edit")
-    public String editCourseSubmit(Model model, @ModelAttribute TeacherDto teacherDto){
+    public String editTeacherSubmit(Model model, @ModelAttribute TeacherDto teacherDto){
         model.addAttribute("view", "edit");
         model.addAttribute(
                 "teacherDto",

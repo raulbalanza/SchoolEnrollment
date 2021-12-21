@@ -86,7 +86,7 @@
               <span data-feather="users"></span> <h4 class="my-0 font-weight-normal">Students</h4>
             </div>
             <div class="card-body">
-              <h1 class="card-title pricing-card-title"><span>999</span> <small class="text-muted" style="font-size: 20px;">registered students</small></h1>
+              <h1 class="card-title pricing-card-title"><span th:text="${#lists.size(students)}">999</span> <small class="text-muted" style="font-size: 20px;">registered students</small></h1>
               <ul class="list-unstyled mt-3 mb-4">
                 <li>Register new students</li>
                 <li>Manage enrolled courses of each student</li>

@@ -47,6 +47,7 @@ class CourseServiceTest {
             "Test", "Professor", LocalDate.of(1997, 5, 15), "Assistant");
     ClassInterval ci = new ClassInterval(DayOfWeek.MONDAY, 14, 0, 15, 30);
     ClassInterval ci2 = new ClassInterval(DayOfWeek.MONDAY, 14, 30, 16, 0);
+    ClassInterval ci3 = new ClassInterval(DayOfWeek.MONDAY, 14, 30, 13, 30);
 
     @BeforeEach
     void setUp() throws UnknownEntityException {
@@ -173,6 +174,7 @@ class CourseServiceTest {
         assertThrows(UnknownEntityException.class, () -> this.courseService.addSchedule(null, ci));
         assertThrows(UnknownEntityException.class, () -> this.courseService.addSchedule(c.getID(), null));
         assertThrows(UnknownEntityException.class, () -> this.courseService.addSchedule(c2.getID(), ci));
+        assertThrows(EntityStateException.class, () -> this.courseService.addSchedule(c.getID(), ci3));
 
     }
 
