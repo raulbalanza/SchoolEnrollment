@@ -3,7 +3,7 @@ services:
     build: .
     container_name: school_enrollment_server
     ports:
-      - "8080:8080"
+      - "80:8080"
     depends_on:
       - database
     environment:
@@ -15,3 +15,7 @@ services:
     container_name: school_enrollment_db
     environment:
       - "POSTGRES_PASSWORD=raulproject"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+volumes:
+  pg_data:
