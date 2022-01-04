@@ -114,6 +114,7 @@ class StudentServiceTest {
                 "Raul", "Balanza Garcia", LocalDate.of(2000, 1, 30), 3);
 
         this.studentService.update(st_changed);
+        assertTrue(st_changed.getPassword().equals(st.getPassword()));
         Mockito.verify(studentRepository, Mockito.atLeast(1)).save(st_changed);
 
     }

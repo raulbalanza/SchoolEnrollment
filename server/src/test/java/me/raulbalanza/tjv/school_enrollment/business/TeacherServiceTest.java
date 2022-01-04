@@ -115,6 +115,7 @@ class TeacherServiceTest {
                 "Ondrej", "Guth", LocalDate.of(1995, 4, 5), "Teacher");
 
         this.teacherService.update(t_changed);
+        assertTrue(t_changed.getPassword().equals(t.getPassword()));
         Mockito.verify(teacherRepository, Mockito.atLeast(1)).save(t_changed);
 
     }
