@@ -109,6 +109,17 @@ class TeacherServiceTest {
     }
 
     @Test
+    void updateExistsNullPassword() throws UnknownEntityException {
+
+        Teacher t_changed = new Teacher("guthondr", "12345678B", null, "new_email@fit.cvut.cz",
+                "Ondrej", "Guth", LocalDate.of(1995, 4, 5), "Teacher");
+
+        this.teacherService.update(t_changed);
+        Mockito.verify(teacherRepository, Mockito.atLeast(1)).save(t_changed);
+
+    }
+
+    @Test
     void updateDoesNotExist() {
 
         Teacher t2_changed = new Teacher("testteacher", "12345678D", "123456", "testing.teacher@fit.cvut.cz",

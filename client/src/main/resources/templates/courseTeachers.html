@@ -62,6 +62,14 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">Course teachers</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
+
+              <div th:unless="${#lists.isEmpty(teachers)}" class="mr-2">
+                <a th:if="${teachers[0].errorMessage}" th:href="@{'/courses/teachers/' + ${courseID}}"><button class="btn btn-sm btn-outline-danger">
+                  <span data-feather="arrow-left"></span>
+                  Back
+                </button></a>
+              </div>
+
               <a th:href="@{'/courses/teachers/' + ${courseID} + '/create'}"><button class="btn btn-sm btn-outline-success">
                 <span data-feather="plus"></span>
                 Add teacher

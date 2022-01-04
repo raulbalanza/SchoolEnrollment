@@ -18,6 +18,18 @@ public class TeacherService extends CrudService<String, Teacher, TeacherReposito
         this.courseRepository = courseRepository;
     }
 
+    @Override
+    public void update(Teacher entity) throws UnknownEntityException {
+
+        if (entity.getPassword() == null) {
+            var teach = this.readById(entity.getUsername());
+            entity.setPassword(teach.getPassword());
+        }
+
+        super.update(entity);
+
+    }
+
     @Transactional
     @Override
     public void deleteById(String username) throws UnknownEntityException {

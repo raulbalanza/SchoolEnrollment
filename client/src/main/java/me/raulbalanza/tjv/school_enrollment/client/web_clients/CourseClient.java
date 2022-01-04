@@ -34,11 +34,9 @@ public class CourseClient {
                 .bodyToFlux(ClassIntervalDto.class);
     }
 
-    public Mono<String> deleteCourseSchedule(String courseID, ClassIntervalDto ci){
-        return courseWebClient.put().uri("/" + courseID + "/schedule")
-                .contentType(MediaType.APPLICATION_JSON)
+    public Mono<String> deleteCourseSchedule(String courseID, String day, String start, String finish){
+        return courseWebClient.delete().uri("/" + courseID + "/schedule?day=" + day + "&start=" + start + "&finish=" + finish)
                 .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(ci)
                 .retrieve()
                 .bodyToMono(String.class);
     }

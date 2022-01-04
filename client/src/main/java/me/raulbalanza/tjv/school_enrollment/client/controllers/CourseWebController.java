@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 @Controller
 public class CourseWebController {
@@ -25,7 +26,8 @@ public class CourseWebController {
     private final String GENERAL_ERROR_MSG = "An error has occurred, check the provided values.";
     private final String NOT_FOUND_MSG = "That course does not exist, check the provided ID.";
     private final String NOT_VALID_FILTER = "The specified filter values are not valid.";
-    private final String INTERVAL_CONFLICT = "The specified schedule overlaps with an existing one.";
+    private final String INTERVAL_CONFLICT = "The specified schedule overlaps with an existing one or " +
+            "the starting time is later than the ending time.";
     private final String ALREADY_TEACHING_MSG = "That teacher was already teaching that course.";
     private final String NOT_TEACHING_MSG = "That teacher was not teaching that course.";
 
@@ -50,17 +52,23 @@ public class CourseWebController {
 
     @GetMapping("/courses/schedule/{id}/delete")
     public String deleteCourseSchedule(Model model, @PathVariable String id, @RequestParam String day, @RequestParam String start, @RequestParam String finish){
-        LocalTime st = LocalTime.parse(start);
-        LocalTime fi = LocalTime.parse(finish);
-        DayOfWeek dOw = DayOfWeek.valueOf(day);
 
         model.addAttribute("id", id);
         model.addAttribute("start", start);
         model.addAttribute("finish", finish);
         model.addAttribute("day", day);
-        model.addAttribute("response",
-                courseClient.deleteCourseSchedule(id, new ClassIntervalDto(dOw, st, fi)).onErrorReturn("-")
-        );
+
+        try {
+
+            model.addAttribute("response",
+                    courseClient.deleteCourseSchedule(id, day, start, finish).onErrorReturn("-")
+            );
+
+        } catch (DateTimeParseException | IllegalArgumentException | NullPointerException e){
+
+            model.addAttribute("response", "-");
+
+        }
 
         return "deleteCourseSchedule";
     }

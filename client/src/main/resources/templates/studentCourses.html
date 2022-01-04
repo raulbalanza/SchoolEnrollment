@@ -62,10 +62,19 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">Student courses</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
+
+              <div th:unless="${#lists.isEmpty(courses)}" class="mr-2">
+                <a th:if="${courses[0].errorMessage}" th:href="@{'/students/courses/' + ${studentID}}"><button class="btn btn-sm btn-outline-danger">
+                  <span data-feather="arrow-left"></span>
+                  Back
+                </button></a>
+              </div>
+
               <a th:href="@{'/students/courses/' + ${studentID} + '/create'}"><button class="btn btn-sm btn-outline-success">
                 <span data-feather="plus"></span>
                 New enrollment
               </button></a>
+
             </div>
           </div>
 

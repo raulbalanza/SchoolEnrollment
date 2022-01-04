@@ -18,6 +18,17 @@ public class StudentService extends CrudService<String, Student, StudentReposito
     }
 
     @Override
+    public void update(Student entity) throws UnknownEntityException {
+
+        if (entity.getPassword() == null) {
+            var stu = this.readById(entity.getUsername());
+            entity.setPassword(stu.getPassword());
+        }
+
+        super.update(entity);
+    }
+
+    @Override
     protected boolean exists(Student entity) {
         return repository.existsById(entity.getUsername());
     }

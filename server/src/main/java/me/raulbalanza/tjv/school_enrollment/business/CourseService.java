@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.security.InvalidParameterException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 
 @Component
@@ -88,7 +91,24 @@ public class CourseService extends CrudService<String, Course, CourseRepository>
     }
 
     @Transactional
-    public void removeSchedule(String id, ClassInterval oldCi) throws UnknownEntityException {
+    public void removeSchedule(String id, String day, String start, String finish) throws UnknownEntityException,
+            IllegalArgumentException {
+
+        LocalTime st, fi;
+        DayOfWeek dOw;
+        ClassInterval oldCi = null;
+
+        try {
+
+            st = LocalTime.parse(start);
+            fi = LocalTime.parse(finish);
+            dOw = DayOfWeek.valueOf(day);
+
+            oldCi = new ClassInterval(dOw, st.getHour(), st.getMinute(), fi.getHour(), fi.getMinute());
+
+        } catch (DateTimeParseException | IllegalArgumentException | NullPointerException e){
+            throw new IllegalArgumentException("Incorrect values for the specified interval");
+        }
 
         if (oldCi == null || id == null)
             throw new UnknownEntityException("One of the required entities was not provided.");

@@ -17,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.parser.Entity;
 import java.security.InvalidParameterException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -82,9 +84,10 @@ class CourseController {
         return ci;
     }
 
-    @PutMapping("/courses/{id}/schedule")
-    void deleteSchedule(@RequestBody ClassInterval ci, @PathVariable String id) throws UnknownEntityException {
-        this.courseService.removeSchedule(id, ci);
+    @DeleteMapping("/courses/{id}/schedule")
+    void deleteSchedule(@PathVariable String id, @RequestParam String day,
+                        @RequestParam String start, @RequestParam String finish) throws UnknownEntityException {
+        this.courseService.removeSchedule(id, day, start, finish);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 

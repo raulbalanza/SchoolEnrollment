@@ -200,10 +200,14 @@ class CourseServiceTest {
     @Test
     void removeScheduleError() {
 
-        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(null, ci));
-        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(c.getID(), null));
-        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(c2.getID(), ci));
-        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(c.getID(), ci));
+        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(null,
+                ci.getDay().toString(), ci.getStart().toString(), ci.getFinish().toString()));
+        assertThrows(IllegalArgumentException.class, () -> this.courseService.removeSchedule(c.getID(),
+                null, null, null));
+        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(c2.getID(),
+                ci.getDay().toString(), ci.getStart().toString(), ci.getFinish().toString()));
+        assertThrows(UnknownEntityException.class, () -> this.courseService.removeSchedule(c.getID(),
+                ci.getDay().toString(), ci.getStart().toString(), ci.getFinish().toString()));
 
     }
 
@@ -211,7 +215,7 @@ class CourseServiceTest {
     void removeScheduleWorking() throws Exception {
 
         c.setSchedule(List.of(ci));
-        this.courseService.removeSchedule(c.getID(), ci);
+        this.courseService.removeSchedule(c.getID(), ci.getDay().toString(), ci.getStart().toString(), ci.getFinish().toString());
         Mockito.verify(classIntervalRepository, Mockito.atLeast(1)).delete(ci);
 
     }

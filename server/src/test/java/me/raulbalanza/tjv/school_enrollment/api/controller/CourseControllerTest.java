@@ -238,18 +238,13 @@ class CourseControllerTest {
     @Test
     void deleteSchedule() throws Exception {
 
-        String jsonInterval = "{\n" +
-                "    \"day\": \"MONDAY\",\n" +
-                "    \"start\": \"14:00\",\n" +
-                "    \"finish\": \"15:30\"\n" +
-                "}";
-
         c.setSchedule(Collections.emptyList());
 
-        mockMvc.perform(put("/courses/BIE-TJV/schedule").contentType("application/json").content(jsonInterval)
+        mockMvc.perform(delete("/courses/BIE-TJV/schedule?day=" + ci.getDay() + "&start=" + ci.getStart() + "&finish=" + ci.getFinish())
                         .accept("application/json"))
                 .andExpect(status().is(204));
-        Mockito.verify(courseService, Mockito.atLeast(1)).removeSchedule(c.getID(), ci);
+        Mockito.verify(courseService, Mockito.atLeast(1)).removeSchedule(c.getID(),
+                ci.getDay().toString(), ci.getStart().toString(), ci.getFinish().toString());
 
     }
 
