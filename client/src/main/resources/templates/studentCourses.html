@@ -68,6 +68,17 @@
                   <span data-feather="arrow-left"></span>
                   Back
                 </button></a>
+                <a th:unless="${courses[0].errorMessage}" th:href="@{'/students'}"><button class="btn btn-sm btn-outline-danger">
+                  <span data-feather="arrow-left"></span>
+                  Back
+                </button></a>
+              </div>
+
+              <div th:if="${#lists.isEmpty(courses)}" class="mr-2">
+                <a th:href="@{'/students'}"><button class="btn btn-sm btn-outline-danger">
+                  <span data-feather="arrow-left"></span>
+                  Back
+                </button></a>
               </div>
 
               <a th:href="@{'/students/courses/' + ${studentID} + '/create'}"><button class="btn btn-sm btn-outline-success">
