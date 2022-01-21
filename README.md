@@ -35,4 +35,4 @@ The application uses the following libraries/frameworks:
 
 ## Continuous integration
 
-This repository features continuous integration, so it is configured to perform automated testing and building in both the client and server part.
+This repository features continuous integration using GitHub Actions, so it is configured to perform automated testing and building in both the client and server part.
