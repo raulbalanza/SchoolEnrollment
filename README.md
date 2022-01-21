@@ -1,8 +1,8 @@
-# TJV Semestral project - School enrollment
-
-Semestral project of Raúl Balanzá García for BIE-TJV @ FIT-CVUT on Winter semester 2021-22.
+# School enrollment
 
 This project is an application to manage enrollment of students in a school and also to store information about which teachers are teaching each course, and which is the schedule of the course.
+
+This application was used as the semestral project for the BIE-TJV course @ FIT-CVUT.
 
 ## API documentation
 
@@ -25,8 +25,14 @@ The client part is meant to be deployed using Docker. To launch the client, the 
 4. Run a container by executing `docker run -dp <port>:8081 se_client`
    1. `<port>` must be replaced by the desired client port.
 
-## Auto-deployment
+## Technologies
 
-This repository is configured to perform automated testing in both the client and server part, and also to deploy automatically the server part into the Oracle Cloud services.
+The application uses the following libraries/frameworks:
 
-The public API is available at **http://tjv.raulbalanza.me:80**
+- SpringBoot
+- Gradle
+- Docker
+
+## Continuous integration
+
+This repository features continuous integration, so it is configured to perform automated testing and building in both the client and server part.
