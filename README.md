@@ -1,5 +1,7 @@
 # School enrollment
 
+![Continuous Integration](https://github.com/raulbalanza/SchoolEnrollment/actions/workflows/ci.yml/badge.svg)
+
 This project is an application to manage enrollment of students in a school and also to store information about which teachers are teaching each course, and which is the schedule of the course.
 
 This application was used as the semestral project for the BIE-TJV course @ FIT-CVUT.
